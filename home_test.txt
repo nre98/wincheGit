@@ -9,3 +9,11 @@ git pull origin master --깃허브 파일 가져오기
 git add . --깃허브에 로컬파일 업로드 하기
 git commit -m "home test"  --변경 내역 기록( 다른PC인경우 author 설정)
 git push origin master --깃허브에 파일전송( 로그인 여부 확인)
+exit --종료
+
+3. git add . --오류발생시( push,pull모두 안될때)
+/.git/index.lock 파일을 삭제할것
+삭제 방법은 
+cd .git (.git 폴더로 이동)
+rm index.lock ( index.lock 파일 삭제)
+cd ..( c/work/wincheGit (master)폴더로 이동 )
