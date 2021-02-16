@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>신학기</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,user-scalable=no" />
+  
+  <!-- 공유 Tag설정 -->
+  <link rel="canonical" href="http://0handong-event.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="사죠영">
+  <meta property="og:description" content="새로운 iPhone을 가장 빠르고 귀엽게">
+  <meta property="og:image" content="images/thum_main.jpg">
+  <meta property="og:url" content="http://top.b-link.co.kr">
+
+  <meta name="description" content="새로운 iPhone을 가장 빠르고 귀엽게">
+  <meta name="keyword" content="">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript">
+    function processEvent() {
+        var restURL = $("#restURL").val();
+        var flag = $("#flag").val();
+        var mphone = $("#mphone").val();
+        var insno = $("#insno").val();
+
+        console.log("restURL:"+restURL);
+        console.log("flag:"+flag);
+        console.log("mphone:"+mphone);
+        console.log("insno:"+insno);
+
+
+        $.ajax({
+            async: true
+            , crossDomain: true
+            , url: restURL
+            , type: 'GET'
+            , dataType: 'JSONP'  
+            , jsonpCallback: "myCallback"
+            , cache: false    
+            , contenteType: "application/jsonp; charset=utf-8"            
+            , data: {
+                flag: flag
+                , mphone: escape(mphone)							
+                , insno: escape(insno)
+            }
+            , success: function(data) {
+                console.log('성공 - ', data);
+            }
+            , error: function (request,status,error) {
+                //alert('일시적인 장애로 인하여\n처리하지 못했습니다.\n잠시 후 다시 이용해 주세요.');
+                $("p").text("code:"+request.status+" message:"+request.responseText+" "+ request.error);
+
+            }
+        });
+    }
+
+
+    //콜백함수
+    function myCallback(obj) {
+    //debugger;
+        if (obj.resultCode=="0"){
+            $('#flag').val("check");
+            $('#insno').val(obj.resultMsg);
+            $("p").text("결과 : 성공");
+            $('#XMLHTTP_BTN').val("인증번호 확인");
+          }else if(obj.resultCode=="1"){
+            $('#flag').val("write");
+            $('#insno').val("");
+            $("p").text("확인 : http://top.b-link.co.kr/dbtest.asp");
+            $('#XMLHTTP_BTN').val("인증번호 요청");
+          }else{
+            $('#flag').val("write");
+            $('#insno').val("");  
+            $("p").text("결과 : 실패");
+            $('#XMLHTTP_BTN').val("인증번호 요청");
+          }
+    }
+  </script>
+
+</head>
+<body>
+<h1>인증번호 요청 확인</h1>
+Ajax 통신 <br /><br />
+
+링크 : <input  type="text"  id="restURL"  value="http://top.b-link.co.kr/ajax/ajax_auth_proc.asp"  size="50"/><br />
+구분 : <input type="text" id="flag" value="write" size="50" /> write : 요청 ,check : 인증<br />
+전화 : <input type="text" id="mphone" value="01042250128" size="50" /><br />
+번호 : <input type="text" id="insno" value="" size="50" /><br />
+<input type="button" id="XMLHTTP_BTN" onclick="processEvent()" value="인증번호 요청" />
+<p>결과 : 없음</p>
+
+<a href="http://top.b-link.co.kr/dbtest.asp" target="_blank">세션확인</a>
+</body>
+</html>
